@@ -1,7 +1,8 @@
 class Tweet < ActiveRecord::Base
   include MetaText::Hashtag
   #could include something else here
-
+  #mike is afraid of the command line
+  #
   validates_presence_of :body
   has_many :replies, 
     :class_name => "Tweet", 
