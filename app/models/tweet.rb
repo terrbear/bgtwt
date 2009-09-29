@@ -1,5 +1,6 @@
 class Tweet < ActiveRecord::Base
   include MetaText::Hashtag
+  #could include something else here
 
   validates_presence_of :body
   has_many :replies, 
