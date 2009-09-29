@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+
+# Horridly hacked together by David Smalley (david@davidsmalley.com) with bits pulled from the
+# Rspec spec_server script, and the acts_as_ferret ferret_start/ferret_stop scripts
+# 11/01/2007
+
+#Supply a PIDNUM if you'd like it to start another worker. PIDNUMs should be unique.
+
+RAILS_ENV = ENV['RAILS_ENV'] = "production"
+PID_SUFFIX = ENV['PIDNUM'] || ARGV[1] || ""
+
+require File.expand_path(File.dirname(__FILE__) + '/../config/boot')
+require RAILS_ROOT + '/config/environment'
+require 'async_observer/worker'
+
+  ################################################################################
+  # methods for becoming a daemon on Unix-like operating systems
+module UnixDaemon
+
+  ################################################################################
+  def platform_daemon (&block)
+    safefork do
+      write_pid_file
+      trap("TERM") { exit(0) }
+      sess_id = Process.setsid
+      STDIN.reopen("/dev/null")
+      STDOUT.reopen("#{RAILS_ROOT}/log/async-worker.out", "a")
+      STDERR.reopen(STDOUT)
+      block.call
+    end
+  end
+
+  ################################################################################
+  # stop the daemon, nicely at first, and then forcefully if necessary
+  def stop
+    pid = read_pid_file
+    if pid
+      $stdout.puts("stopping async-worker...")
+      Process.kill("TERM", pid)
+      30.times { Process.kill(0, pid); sleep(0.5) }
+      $stdout.puts("using kill -9 #{pid}")
+      Process.kill(9, pid)
+    else
+      $stdout.puts("didn't find an async-worker...") 
+    end
+  rescue Errno::ESRCH => e
+    $stdout.puts("process #{pid} has stopped")
+  ensure
+    File.unlink("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid") if File.exist?("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid")
+  end
+
+  ################################################################################
+  def safefork (&block)
+    @fork_tries ||= 0
+    fork(&block)
+  rescue Errno::EWOULDBLOCK
+    raise if @fork_tries >= 20
+    @fork_tries += 1
+    sleep 5
+    retry
+  end
+
+  #################################################################################
+  # create the PID file and install an at_exit handler
+  def write_pid_file
+		exit(1) if File.exists?("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid")
+    open("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid", "w") {|f| f << Process.pid << "\n"}
+    at_exit { File.unlink("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid") if read_pid_file == Process.pid }
+  end
+
+  #################################################################################
+  def read_pid_file
+    File.read("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid").to_i if File.exist?("#{RAILS_ROOT}/log/async-worker.#{PID_SUFFIX}.pid")
+  end
+
+end
+include UnixDaemon
+
+case ARGV[0]
+when "start"
+  UnixDaemon.platform_daemon do
+    begin
+      AsyncObserver::Worker.new(binding).run()
+    rescue
+      $stderr.puts "Error starting Async worker: #{$!}"
+      $stderr.puts $!.backtrace
+      exit(1)
+    end
+  end
+when "stop"
+  UnixDaemon.stop
+end

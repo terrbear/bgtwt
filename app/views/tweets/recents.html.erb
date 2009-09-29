@@ -1,0 +1,7 @@
+<h1>Recent Bgtwts</h1>
+<% @recents.each do |tweet| %>
+  <a href="/<%= tweet.code %>"><%= "[#{tweet.replies.size}] #{h tweet.title(:short => true)}" %></a><br/>
+<% end %>
+<div class="right">
+	<%=link_to(image_tag('rss-icon.png', :alt => 'rss-feed'), "http://feeds2.feedburner.com/recents") %>
+</div>

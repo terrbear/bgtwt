@@ -1,0 +1,11 @@
+<h1>Watched Threads</h1>
+<% @watches.each do |watch| %>
+  <span id="watch_<%= watch.id %>">
+  <%= link_to_remote("[x]",
+  :url => {:controller => :tweets, 
+  :action => :unwatch, :params => {:id => watch.id}},
+  :complete => "$('watch_#{watch.id}').remove()") %>
+
+  <a href="/<%= watch.code %>"><%= super_short(watch) %></a><br/>
+  </span>
+<% end %>

@@ -1,0 +1,75 @@
+<% 
+   collapsible ||= false
+%>
+
+<div id="<%= tweet.id %>" class="tweet message">
+  <% if tweet.parent? %>
+    <div class="tweet_title"><%= h tweet.title %></div>
+  <% end %>
+
+  <div id="message_<%= tweet.id %>">
+  <div id="edit_pane_<%= tweet.id %>" style="display:none; margin-bottom: 2em;">&nbsp;</div>
+
+  <div id="content_pane_<%= tweet.id %>" class="tweet_content">
+    <span class="gravatar">
+      <%= link_to(gravatar_for(tweet.author), :controller => :users, :action => :show, :id => tweet.author.id) if tweet.author %>
+    </span>
+    <%= filter_body(tweet.body, abbreviated ||= false) %>
+  </div>
+  </div>
+
+  <div class="tweet_toolbar" ondblclick="
+  	if ($('#<%=tweet.id%>_hide').is(':hidden')) {
+	  $('#message_<%= tweet.id %>').blindDown(); $('#<%= tweet.id %>_hide').show(); $('#<%= tweet.id %>_show').hide();	
+	}else {
+	  $('#message_<%= tweet.id %>').blindUp(); $('#<%= tweet.id %>_hide').hide(); $('#<%= tweet.id %>_show').appear();
+  	}
+	 return false;
+  ">
+    <span class="tweet_author">
+      &nbsp; by <%= user_link_from_tweet(tweet) %> on <%= tweet.created_at.strftime("%d%b%y @ %I:%M%p CST") %>
+    </span>
+
+    <span class="tweet_actions">
+      <% if tweet.parent? %>
+	  <%=link_to('RSS', :controller => :tweets, :action => :show, :id => tweet.id, :format => :xml)%>
+	  |
+    <script language="javascript" type="text/javascript">
+	    SHARETHIS.addEntry({
+        title:'<%= truncate(escape_javascript(tweet.title), :length => 25) %>',
+        url:'<%= tweet.permalink %>'
+	    }, {button:true} );
+	  </script> |
+	  <% end %>
+    
+      <% if abbreviated %>
+        <a href="<%= tweet.permalink %>">[<%= tweet.replies.size %>]</a>
+      <% else %>
+        <a href="<%= tweet.permalink %>">Link</a>
+      <% end %>
+      <span class="admin_links">
+        <% if tweet.parent? %>
+          | 
+          <% if tweet.sticky? %>
+            <%= link_to "Unstick", :controller => :tweets, :action => :unstick, :id => tweet.id %>
+          <% else %>
+            <%= link_to "Stick", :controller => :tweets, :action => :stick, :id => tweet.id %>
+          <% end %>
+          | <%= link_to "Delete", {:controller => :tweets, :action => :delete, :id => tweet.id}, 
+                                  :confirm => "Are you sure you want to delete this tweet?" %>
+        <% end %>
+      </span>
+      <span class="edit_link edit_link_<%= tweet.author && tweet.author.id %>">
+		    | <%= link_to_remote "Edit", :url => {:action => :edit, :id => tweet.id},
+		      :update => {:success => "edit_pane_#{tweet.id}"},
+          :success => "$('#edit_pane_#{tweet.id}').appear();" %>
+      </span>
+
+      <% if collapsible %>
+        | 
+        <a id="<%=tweet.id%>_hide" href="#<%=tweet.id%>" onclick="$('#message_<%= tweet.id %>').blindUp(); $('#<%= tweet.id %>_hide').hide(); $('#<%= tweet.id %>_show').appear(); return false;">Hide</a>
+        <a id="<%=tweet.id%>_show" style="display: none;" href="#<%=tweet.id%>" onclick="$('#message_<%= tweet.id %>').blindDown(); $('#<%= tweet.id %>_hide').show(); $('#<%= tweet.id %>_show').hide(); return false;">Show</a>
+      <% end %>
+    </span>
+  </div>
+</div>

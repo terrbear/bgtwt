@@ -1,0 +1,39 @@
+<div id="firehose_entry_<%= tweets.first.id %>" style="display:none;">
+<% tweets.each do |tweet| %>
+  <div class="firehose_type">
+    <a href="<%= tweet.permalink %>">
+    <% if tweet.parent? %>
+      <img height="45" width="45" src="/images/parent.png"></a>
+    <% else %>
+      <img height="45" width="45" src="/images/reply.png">
+    <% end %>
+    </a>
+  </div>
+ 
+<div id="<%= tweet.id %>" class="firehose_tweet">
+  <div id="message_<%= tweet.id %>">
+  <div id="content_pane_<%= tweet.id %>" class="tweet_content">
+    <span class="gravatar">
+      <%= link_to(gravatar_for(tweet.author), :controller => :users, :action => :show, :id => tweet.author.id) if tweet.author %>
+    </span>
+    <%= filter_body(tweet.body, abbreviated ||= false) %>
+  </div>
+  </div>
+ 
+  <div class="tweet_toolbar">
+    <span class="tweet_author">
+      &nbsp; by <%= user_link_from_tweet(tweet) %> on <%= tweet.created_at.strftime("%d%b%y @ %I:%M%p CST") %>
+    </span>
+ 
+    <span class="tweet_actions">
+    
+      <a href="<%= tweet.permalink %>">Link</a>
+    </span>
+  </div>
+</div>
+<% end %>
+</div>
+ 
+<script type="text/javascript">
+  $('#firehose_entry_<%= tweets.first.id %>').dropIn(3);
+</script>

@@ -1,0 +1,7 @@
+<% form_for :tweet, @tweet, :url => {:action => :update, :id => @tweet.id} do |f| %>
+  <%= render(:partial => "form", :locals => {:f => f}) %>
+  <div style="float:right;">
+  <%= submit_tag "Update" %>
+  <a href="#" onclick="$('#edit_pane_<%= @tweet.id %>').fade(); return false;">Cancel</a>
+  </div>
+<% end %>

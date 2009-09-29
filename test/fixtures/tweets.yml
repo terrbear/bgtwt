@@ -1,0 +1,32 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+<% (1..150).each do |n| %>
+tweet_<%= n %>:
+  body: whatevz 
+  score: <%= n %>
+  created_at: <%= Time.now - n %>
+<% end %>
+
+highest_ranked:
+  author: terry
+  body: im so cool
+  score: 4000
+  created_at: <%= Time.now %>
+
+<% (1..5).each do |n| %>
+high_reply_<%= n %>:
+  body: reply!
+  parent: highest_ranked
+<% end %>
+
+old_highest_ranked:
+  author: terry
+  body: i used to be cool
+  score: 2000
+  created_at: <%= Time.now - 10 %>
+
+<% (1..20).each do |n| %>
+old_reply_<%= n %>:
+  body: so old
+  parent: old_highest_ranked
+<% end %>

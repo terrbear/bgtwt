@@ -1,0 +1,37 @@
+<% content_for :menu_content do -%>
+	  <div id="profile" class="tweet_container">
+      <b>Name</b> <%= h @user.name %><br/>
+        <% if @user.has_twitter? -%>
+          <b>Twitter</b> <a href="http://www.twitter.com/<%= @user.twitter %>" target="_new">@<%= @user.twitter %></a><br/>
+        <% end %>
+        <b>Tagline</b> <i><%= @user.tagline %></i><br/>
+
+        <% if current_user == @user %>
+          <br/>
+          <b>Email</b> <%=h @user.email %><br/>
+          <br/>
+            <%= link_to '&raquo; Export', export_url %><br/>
+            <%= link_to '&raquo; Edit', edit_user_path(@user) %>
+        <% end %>
+
+    </div>
+<% end %>
+
+
+
+<div id="user_recents">
+<div id="recent_tweets">
+<p><%=link_to(image_tag('rss-icon.png', :alt => 'rss-feed'), :controller => :tweets, :action => :user_feed, :id => @user.id)%>
+<%= page_entries_info @tweets %></p>
+
+<% @tweets.each do |tweet| %>
+  <div style="margin-top: 1em;" class="tweet">
+  <%= render(:partial => "tweets/tweet", :locals => {:tweet => tweet, :abbreviated => true, :collapsible => true}) %>
+  </div>
+<% end %>
+<br/>
+<ul class="tweet" id="navigation">
+  <%= will_paginate @tweets %>
+</ul>
+</div>
+</div>

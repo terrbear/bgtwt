@@ -1,0 +1,9 @@
+	<% toggle = !@odd.nil?
+	@tweets.each do |tweet|
+	  toggle = !toggle
+	%>
+		<%= render(:partial => "tweets/tweet", :locals => {:tweet => tweet, :no_user => true, :toggle => toggle}) %>	
+	<% end %>
+	<% if @more %>
+		<li><%=link_to('More', {:controller => :users, :action => :user_feed_more, :id => @user.id, :current=>(@current+@max), :max=> @max}, :target => '_replace')%></li>
+	<% end %>

@@ -1,0 +1,6 @@
+	<% @tweets.each do |tweet|%>
+		<%= render(:partial => "tweet", :locals => {:tweet => tweet}) %>	
+	<% end %>
+	<% if @more %>
+		<li><%=link_to('More', {:controller => :tweets, :action => :recent_feed_more, :current=>(@current+@max), :max=> @max}, :target => '_replace')%></li>
+	<% end %>

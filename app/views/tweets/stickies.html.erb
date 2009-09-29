@@ -1,0 +1,9 @@
+<% unless @stickies.blank? %>
+<h1>Stickies</h1>
+<% @stickies.each do |tweet| %>
+  <a href="/<%= tweet.code %>"><%= "[#{tweet.replies.count}] #{h tweet.title(:short => true)}" %></a><br/>
+<% end %>
+<script type="text/javascript">
+  $('#stickies').show();
+</script>
+<% end %>

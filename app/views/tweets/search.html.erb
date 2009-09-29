@@ -1,0 +1,7 @@
+<p>bgtwts matching <%= @search_string %>:</p>
+
+<% @tweets.each do |tweet| %>
+  <div style="margin-top: 1em;" class="tweet">
+  <%= render(:partial => "tweet", :locals => {:tweet => tweet, :collapsible => true}) %>
+  </div>
+<% end %>

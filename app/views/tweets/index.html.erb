@@ -1,0 +1,17 @@
+<p>If you're new to bgtwt, this is where everything starts. Start writing up some idea, 
+question, rant, complaint, whatever. <a href="http://www.twitter.com/bgtwt">@bgtwt</a> 
+will automatically RT it for you, and some other people will probably see it in the
+Recent widget on the right</p>
+<p>But even then, you can share the link with your friends, and get a lively discussion
+going. That's what this is all about. Talking *with* people; not *at* people.</p>
+
+<div class="tweet">
+<% form_for :tweet, @tweet, :url => { :action => "create" } do |f| %>
+  <%= render(:partial => "tweets/form", :locals => {:f => f}) %>
+  <div style="float:right;">
+    <%= submit_tag "Post", :tabindex => 3 %> or <%= submit_tag "Post Privately", :tabindex => 4 %>
+  </div>
+<% end %>
+</div>
+
+<div style="clear:both;">&nbsp;</div>

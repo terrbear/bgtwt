@@ -1,0 +1,31 @@
+<ul title="<%=@user.handle%>'s Profile" selected="true">
+<li class="group">Author</li>
+<li>
+<span class="gravatar"><%= gravatar_for @user if @user %></span>
+<span class="nolink body">Name:&nbsp;<%=h @user.name %></span>
+<% if @user.has_twitter? %>
+<a href="http://www.twitter.com/<%= @user.twitter %>" target="_new">Twitter: @<%= @user.twitter %></a>
+<% end %>
+<% if current_user == @user %>
+<a href="mailto:<%=@user.email%>">Email:&nbsp;<%=h @user.email %></a>
+</li>
+<li class="group">Actions</li>
+<li>
+<%= link_to 'Edit', edit_user_path(@user) %>
+</li>
+<% end %>
+
+<% if !@tweets.nil? && @tweets.size > 0%>
+<li class="group">Recents</li>
+	<% odd = false
+	@tweets.each do |tweet|
+	  odd = !odd
+	%>
+	    <%= render(:partial => "tweets/tweet", :locals => {:tweet => tweet, :no_user => true, :toggle => odd}) %>
+	<% end %>
+  <% if @more %>
+  	<li><%=link_to('More', {:controller => "users", :action => "user_feed_more", :id => @user.id, :current => "#{@max}", :max => "#{@max}", :odd => odd ? "#{odd}" : nil}, :target => '_replace')%></li>
+  <% end %>
+<% end %>
+</ul>
+

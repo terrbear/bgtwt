@@ -1,0 +1,27 @@
+
+<div id="anon_warning" class="anon_warning">
+</div>
+
+<script type="text/javascript">
+  $.get("http://<%= SERVER_NAME %>/menu/is_anonymous", function(data) {
+        if("true" === data) {
+          $('#tweet_body').text("You're posting anonymously. If you'd like this post to be associated with your user, you should sign in.");
+        }
+      });
+</script>
+
+<% if !@reply %>
+  <%= f.label :title %>: <%= f.text_field :title, :size => 65, :tabindex => 1 %><br/><br/>
+<% end %>
+
+<%= f.text_area :body, :rows => 20, :cols => 70, :tabindex => 2 %><br/>
+
+<div id="honey">
+  Email (required): <input type="text" id="x-email" name="x-email" class="email required"/>
+</div>
+
+<script language="javascript">
+$(document).ready(function()	{
+    $('#tweet_body').markItUp(myTextileSettings);
+});
+</script>

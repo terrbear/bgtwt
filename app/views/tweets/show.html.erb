@@ -1,0 +1,46 @@
+<% if @tweet.secret? %>
+  <p class="secret">Psst! This post is secret. We'll let you know if someone replies over Twitter, but
+    this post wasn't announced via @bgtwt, and won't show up in Movers and Shakers or
+    in Recents or even in your user feed.</p>
+<% end %>
+
+<%= render(:partial => "tweet", :locals => {:tweet => @tweet}) %>
+
+<div id="reply_buffer">
+  <%= render(:partial => "replies", :locals => {:replies => @replies}) %>
+</div>
+
+<div id="reply_form">
+<h1>Reply</h1>
+<% remote_form_for(:tweet, @reply, 
+                   :url => { :action => "reply", :params => {:parent_id => @reply.parent_id} },
+                   :update => "reply_buffer", 
+                   :position => :bottom, 
+                   :success => "js_growl.addMessage({msg:'Nice reply!', icon:'images/newbird.png'}); document.getElementById('tweet_body').value = '';") do |f| %>
+  <%= render(:partial => "form", :locals => {:f => f}) %>
+  <div style="float:right;">
+    <%= submit_tag "Reply", :tabindex => 3 %>
+  </div>
+<% end %>
+</div>
+
+<%= periodically_call_remote(:url => {:controller => :tweets, 
+                             :action => :updates,
+                             :params => {:id => @tweet.id, :viewed => Time.now.utc}}, 
+                             :frequency => '10',
+                             :update => {:success => "reply_buffer", :failure => ""},
+                             :position => :bottom) %>
+
+<script type="text/javascript">
+  function populate_links(request) {
+    if(request === "admin") {
+      $('.admin_links').show();
+      $('.edit_link').show();
+    } else if(request != null) {
+      $('.edit_link_' + request).show();
+    }
+  }
+
+<%= remote_function(:url => {:controller => :menu, :action => :permissions},
+                    :success => "populate_links(eval(request))") %>
+</script>

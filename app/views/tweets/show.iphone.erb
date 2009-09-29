@@ -1,0 +1,21 @@
+<ul title="Bgtwt" selected="true">
+	<li>
+	<% if @tweet.editable?(current_user) %>
+		<%=link_to(filter_body(@tweet.body), {:action => :edit, :id => @tweet.id}, {:class => "body message"})%>
+	<% else %>
+		<span class="body message"><%=filter_body(@tweet.body)%></span>
+	<% end %>
+	</li>
+	<% if @tweet.parent.nil? %>
+	<li class="group">Actions</li>
+	<li><%=link_to('Reply',:action => :edit_reply, :id => @tweet.id, :no_layout => true)%></li>
+	<% end %>
+	<li class="group">Replies</li>
+	<% @tweet.replies.each do |reply|%>
+		<%= render(:partial => "tweet", :locals => {:tweet => reply}) %>	
+	<% end %>
+	<% if @tweet.parent.nil? %>
+	<li class="group">Actions</li>
+	<li><%=link_to('Reply',:action => :edit_reply, :id => @tweet.id, :no_layout => true)%></li>
+	<% end %>
+</ul>

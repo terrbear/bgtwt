@@ -1,0 +1,146 @@
+<html>
+  <head>
+    <title>BgTwt!</title>
+    <%= stylesheet_link_merged :base %>
+    <%= javascript_include_merged :base %>
+    <%= stylesheet_link_tag "ck_fu" unless RAILS_ENV == "production" %>
+    <script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=36ede302-37a2-476e-bd24-350b7ad777fd&amp;type=website&amp;buttonText=Share&amp;post_services=facebook%2Ctwitter%2Cfriendfeed%2Cmyspace%2Cdigg%2Cdelicious%2Cybuzz%2Cstumbleupon%2Creddit%2Ctechnorati%2Cmixx%2Cblogger%2Cwordpress%2Ctypepad%2Cgoogle_bmarks%2Cwindows_live%2Cfark%2Cbus_exchange%2Cpropeller%2Cnewsvine%2Clinkedin"></script>
+	
+	<%= auto_discovery_link_tag(:rss, "http://feeds2.feedburner.com/recents", :title => "Recent bgtwts") %>
+	<%= auto_discovery_link_tag(:rss, "http://feeds2.feedburner.com/moverandshakers", :title => "Movers and Shakers") %>
+	<% if @user && !@user.handle.nil?%>
+		<%= auto_discovery_link_tag(:rss, {:controller => :users, :action => :user_feed, :id => @user.id}, :title => "#{@user.handle}'s Recent bgtwts") %>
+	<% end %>
+  </head>
+
+  <script type="text/javascript">
+    var js_growl = new jsGrowl('js_growl');
+  </script>
+
+  <body>
+    <div id="jsGrowl"></div>
+
+    <%= ck_fu %>
+
+    <div id="header">
+      <div id="logo">
+        <a href="/"><img src="/images/newbird.png"/></a>
+      </div>
+
+      bgtwt: <%= h(truncate(User.tagline, :length => 75) || "for when your thoughts exceed 140 characters") %>
+    </div>
+
+    
+<div id="iphone_message" class="message" style="display:none;">
+    <!--p>Using an iPhone? <a href="http://mobile.<%=request.host_with_port%>/">Try the optimized version</a>.</p-->
+</div>
+
+    <script type="text/javascript">
+      if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+        $('#iphone_message').show();
+      }
+    </script>
+
+    <% if flash[:notice] %>
+      <script type="text/javascript">
+        js_growl.addMessage({msg:"<%= flash[:notice] %>", icon:'/images/newbird.png'});
+      </script>
+    <% end %>
+
+    <div id="page">
+
+      <table>
+        <tr>
+          <td>
+    <div id="leftbar">
+<script type="text/javascript">
+google_ad_client = "pub-8084726252797470";
+/* left tower */
+google_ad_slot = "9996683373";
+google_ad_width = 160;
+google_ad_height = 600;
+</script>
+
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+    </div>      
+  </td>
+  <td>
+
+    <div id="main">
+      <%= yield %>
+
+  <div id="footer">
+    All user content published under the bgtwt.com's <a href="http://www.bgtwt.com/pages/tos">Terms of Service</a> 
+    | bgtwt.com &copy; 2009, <a href="http://www.navoty.com">Navoty LLC</a> 
+    | <a href="http://www.bgtwt.com/pages/api">API Info</a>
+  </div>
+
+    </div>
+  </td>
+  <td>
+
+    <div id="menu">
+
+    <div id="search">
+      <form action="/tweets/search" method="GET">
+        <input type="text" size="22" name="search" value="Search..." id="search_box" onclick="if($(this).val() === 'Search...'){$(this).val('');}" />
+      </form>
+  	  <br/>
+    </div>
+
+    <%= yield :menu_content %>
+
+	  <div id="actionsmenu" class="tweet_container">
+      <script type="text/javascript">
+      <%= remote_function(:url => {:controller => :menu, :action => :actions}, 
+                          :update => "actionsmenu") %>
+      </script>
+
+    </div>
+
+    <div id="stickies" class="tweet_container" style="display:none;">
+      <script type="text/javascript">
+      <%= remote_function(:url => {:controller => :tweets, :action => :stickies}, 
+                          :update => "stickies") %>
+      </script>
+    </div>
+
+    <div id="shakers" class='tweet_container'>
+      <script type="text/javascript">
+      <%= remote_function(:url => {:controller => :tweets, :action => :shakers}, 
+                          :update => "shakers") %>
+      </script>
+    </div>
+
+    <div id="recents" class="tweet_container">
+      <script type="text/javascript">
+      <%= remote_function(:url => {:controller => :tweets, :action => :recents}, 
+                          :update => "recents") %>
+      </script>
+    </div>
+
+    </div>
+
+  </td>
+</tr>
+</table>
+  </div>
+
+    <br/><br/>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-8236350-1");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+  </body>
+</html>

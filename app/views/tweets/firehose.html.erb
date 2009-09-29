@@ -1,0 +1,9 @@
+<div id="firehose">
+  <div id="firehose_explanation">The firehose will update whenever someone bgtwts anything.</div>
+</div>
+
+<%= periodically_call_remote(:url => {:controller => :tweets, :action => :firehose_feed},
+                             :frequency => '3',
+                             :update => {:success => "firehose", :failure => ""},
+                             :success => "$('#firehose_explanation').hide()",
+                             :position => :top) %>

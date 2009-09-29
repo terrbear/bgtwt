@@ -1,0 +1,8 @@
+<%= link_to "&raquo; Firehose", firehose_url, :style => "color: red;" %><br/>
+<%= link_to "&raquo; Create a Bgtwt", :controller => :tweets, :action => :index %><br/>
+<% if logged_in? %>
+  <%= link_to "&raquo; Profile", user_url(current_user) %><br/>
+  <%= link_to "&raquo; Sign Out", signout_url %><br/>
+<% else %>
+  <%= link_to "&raquo; Sign In", signin_url %><br/>
+<% end %>

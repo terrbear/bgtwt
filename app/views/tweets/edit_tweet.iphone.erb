@@ -1,0 +1,8 @@
+<div class="tweet" selected="true">
+<% form_for :tweet, @tweet, :url => { :action => "create" } do |f| %>
+  <%= render(:partial => "tweets/form", :locals => {:f => f}) %>
+  <div style="float:right;">
+    <%= submit_tag "Post" %>
+  </div>
+<% end %>
+</div>

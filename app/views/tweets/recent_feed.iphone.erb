@@ -1,0 +1,8 @@
+<ul title="Recent Bgtwts" selected="true">
+	<% @tweets.each do |tweet|%>
+		<%= render(:partial => "tweet", :locals => {:tweet => tweet}) %>	
+	<% end %>
+	<% if @more %>
+		<li><%=link_to('More', {:controller => "tweets", :action => "recent_feed_more", :current => "#{@max+1}", :max => "#{@max}"}, :target => '_replace')%></li>
+	<% end %>
+</ul>

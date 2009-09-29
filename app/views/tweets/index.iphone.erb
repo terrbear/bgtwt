@@ -1,0 +1,12 @@
+<ul title="Bgtwt!" selected="true">
+    <li><%= link_to "Create a Bgtwt", {:controller => :tweets, :action => :edit_tweet, :no_layout => true} %></li>
+	<li><%= link_to "Movers and Shakers", {:controller => :tweets, :action => :ms_feed} %></li>
+	<li><%= link_to "Recents", {:controller => :tweets, :action => :recent_feed} %></li>
+	<% if !logged_in? %>
+    	<li><%= link_to 'Sign in ', signin_url(:no_layout => true) %></li>
+	<% else %>
+		<li><%= link_to 'Profile', user_url(current_user) %></li>
+		<li><%= link_to 'Sign out', signout_url(:no_layout => true) %></li>
+	<% end %>
+</ul>
+

@@ -1,0 +1,37 @@
+<% no_user ||= false
+   toggle ||= false
+%>
+<% if toggle %>
+<li class="even">
+<% else %>
+<li>
+<% end %>
+	<% if tweet.parent.nil?%>
+		<span class="count"><%=tweet.replies.count%></span>
+	<% end %>
+
+	<% if !tweet.parent.nil?%>
+		<% if tweet.editable?(current_user)%>
+		  <a class="body message" href="/<%=tweet.code%>?no_layout=true"><%=filter_body(tweet.body)%></a>
+		<% else %>
+		  <span class="nolink body message"><%=filter_body(tweet.body)%></span>
+		<% end %>
+	<% else %>
+	  <a class="body message" href="/<%=tweet.code%>?no_layout=true"><%=filter_body(tweet.body)%></a>
+	<% end %>
+	<% if !no_user %>
+		<% if tweet.author.nil?%>
+			<span class="nolink body author">
+		<% else %>
+			<a class="body author" href="/users/<%=tweet.author.id%>?no_layout=true">
+		<% end %>
+			<span class="gravatar"><%= gravatar_for tweet.author if tweet.author %></span>
+			by <%=tweet.author_name%> 
+			<span class="body footer"><%= tweet.created_at.strftime("%d%b%y @ %I:%M%p CST") %></span>
+		<% if tweet.author.nil?%>
+			</span>
+		<% else %>
+			</a>
+		<% end %>	
+	<% end %>
+</li>

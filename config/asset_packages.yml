@@ -1,0 +1,26 @@
+--- 
+javascripts: 
+- base: 
+  - jquery
+  - jquery-ui
+  - jrails
+  - openid-jquery
+  - jsGrowl
+  - jsGrowl_jquery
+  - jquery.markitup
+  - textile
+- iphone: 
+  - iui
+  - jquery
+  - jquery-ui
+  - openid-jquery
+stylesheets: 
+- base: 
+  - openid
+  - bgtwt
+  - jsGrowl
+  - markitup
+  - textile
+- iphone: 
+  - iui
+  - openid

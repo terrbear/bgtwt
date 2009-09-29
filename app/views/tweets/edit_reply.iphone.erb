@@ -1,0 +1,9 @@
+<div id="reply_form" selected="true">
+<h1>Reply</h1>
+<% form_for :tweet, @reply, :url => { :action => "reply", :params => {:parent_id => @reply.parent_id} } do |f| %>
+  <%= render(:partial => "form", :locals => {:f => f}) %>
+  <div style="float:right;">
+    <%= submit_tag "Reply" %>
+  </div>
+<% end %>
+</div>

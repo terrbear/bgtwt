@@ -1,0 +1,7 @@
+<h1>Movers & Shakers</h1>
+<% @shakers.each do |tweet| %>
+  <a href="/<%= tweet.code %>"><%= "[#{tweet.replies.count}] #{h tweet.title(:short => true)}" %></a><br/>
+<% end %>
+<div class="right">
+	<%=link_to(image_tag('rss-icon.png', :alt => 'rss-feed'), "http://feeds2.feedburner.com/moverandshakers") %>
+</div>

@@ -1,0 +1,12 @@
+
+<% unless logged_in? %>
+  <div class="anon_warning">If you'd like your post associated with your user, you should <%= link_to "sign in", new_session_url(:no_layout=>true) %> now.</div>
+<% end %>
+
+<%= f.text_area :body, :rows => 10, :cols => 70 %><br/>
+Supports <a href="http://www.textism.com/tools/textile/" target="_new">Textile</a> formatting:
+<span class="textile_example">*<b>bold</b>*</span>
+<span class="textile_example">_<i>emphasis</i>_</span>
+<span class="textile_example">"text":url - link</span>
+<span class="textile_example">!image_url! - image</span>
+<br/>

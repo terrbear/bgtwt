@@ -1,0 +1,22 @@
+<% growl ||= false %>
+<% replies.each_with_index do |reply, index| %>
+  
+  <div id="<%=reply.id%>_tweet" class="tweet reply">
+    <a name="<%= index %>"></a>
+    <%= render(:partial => "tweet", :locals => {:tweet => reply, :collapsible => !reply.parent.nil?}) %> 
+  </div>
+
+  <% if growl %>
+    <script type="text/javascript">
+      $('#<%= reply.id %>_tweet').highlight();
+	  </script>
+  <% end %>
+  
+<% end %>
+
+
+<% if growl %>
+  <script type="text/javascript">
+    js_growl.addMessage({msg:"<%= replies.size %> new replies", icon:'images/newbird.png'});
+  </script>
+<% end %>

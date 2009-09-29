@@ -1,0 +1,5 @@
+<ul title="Movers and Shakers" selected="true">
+	<% @tweets.each do |tweet|%>
+		<%= render(:partial => "tweet", :locals => {:tweet => tweet}) %>	
+	<% end %>
+</ul>

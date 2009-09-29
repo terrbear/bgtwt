@@ -1,0 +1,43 @@
+<div class="tweet message">
+<h1>Editing user</h1>
+
+<% form_for(@user) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :email %> (for gravatar)<br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :twitter %> (for RT)<br />
+    <%= f.text_field :twitter %>
+  </p>
+  <p>
+    <%= f.label :tagline %> (randomly selected as the header text next to the bgtwt icon)<br />
+    <%= f.text_field :tagline %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+
+<% if false %>
+<hr/>
+<p>If you'd like, you can hook your Bgtwt account up to your Twitter account. This will allow you to
+have your tweets RTd by @bgtwt, and to have your bgtwts automatically pushed out via Twitter. This
+is the only way you can link your Twitter name up to your posts.</p>
+
+<p><%= link_to "Link Twitter!", twitter_oauth_url %></p> 
+<% end %>
+
+  <div class="tweet_toolbar">
+    <span class="tweet_actions">
+      <%= link_to 'Cancel', @user %>
+    </span>
+  </div>
+</div>
